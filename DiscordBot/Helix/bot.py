@@ -6,10 +6,11 @@ from utils import gpt, wiki
 load_dotenv()
 
 def get_meme():
-  response = requests.get('https://meme-api.com/gimme')
-  json_data = json.loads(response.text)
-  return json_data['url']
+    response = requests.get('https://meme-api.com/gimme')
+    json_data = json.loads(response.text)
+    return json_data['url']
 
+contexto = ""
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -28,8 +29,8 @@ class MyClient(discord.Client):
             await message.channel.send(wiki(message.content[5:].strip()))
             print (message.content[5:].strip())
         if message.content.startswith('/chat'):
-            await message.channel.send(gpt(message.content))
-            print (message)
+            await message.channel.send(gpt(message.content[5:].strip(),contexto))
+            print (message.content[5:].strip())
 
 
 intents = discord.Intents.default()
