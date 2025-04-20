@@ -4,6 +4,8 @@ from utils import get_meme, gpt, wiki
 
 load_dotenv()
 
+historico = []
+
 class MyClient(discord.Client):
     async def on_ready(self):
         print(f'{self.user} está online!')
@@ -13,11 +15,8 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
         
-        if message.content.startswith('$meme'):
+        if message.content.startswith('/meme'):
             await message.channel.send(get_meme())
-            return
-        elif message.content.startswith('oi'):
-            await message.channel.send('Olá {0}'.format(message.author))
             return
         elif message.content.startswith('/wiki'):
             await message.channel.send(wiki(message.content[5:].strip()))
@@ -26,7 +25,12 @@ class MyClient(discord.Client):
         elif 'helix' in message.content.lower():
             texto = message.content.replace('helix', '').strip()
             print (texto)
-            await message.channel.send(gpt(texto))
+            pergunta = gpt(texto, historico)
+            print (pergunta)
+            await  message.channel.send(pergunta)
+            historico.append({"role": "user", "content": texto})
+            historico.append({"role": "assistant", "content": pergunta})
+            print (historico)
             return
 
 intents = discord.Intents.default()
