@@ -9,6 +9,7 @@ historico = []
 class MyClient(discord.Client):
     async def on_ready(self):
         print(f'{self.user} está online!')
+
     
     async def on_message(self, message):
         # ignora msg própria
@@ -24,13 +25,10 @@ class MyClient(discord.Client):
             return
         elif 'helix' in message.content.lower():
             texto = message.content.replace('helix', '').strip()
-            print (texto)
             pergunta = gpt(texto, historico)
-            print (pergunta)
             await  message.channel.send(pergunta)
             historico.append({"role": "user", "content": texto})
             historico.append({"role": "assistant", "content": pergunta})
-            print (historico)
             return
 
 intents = discord.Intents.default()
