@@ -23,8 +23,10 @@ class MyClient(discord.Client):
             await message.channel.send(wiki(message.content[5:].strip()))
             print (message.content[5:].strip())
             return
-        elif message.content.startswith('/chat'):
-            await message.channel.send(gpt(message.content[5:].strip()))
+        elif 'helix' in message.content.lower():
+            texto = message.content.replace('helix', '').strip()
+            print (texto)
+            await message.channel.send(gpt(texto))
             return
 
 intents = discord.Intents.default()

@@ -35,7 +35,7 @@ load_dotenv()
 chatGptKey = os.getenv('chatGptKey') #Api do .env
 openai.api_key = chatGptKey 
 
-def gpt(message):
+def gpt (message):
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {chatGptKey}",
@@ -44,6 +44,7 @@ def gpt(message):
     data = {
         "model": "gpt-3.5-turbo",         
         "messages": [
+            {"role": "system", "content": "Você é um assistente útil, educado e sempre responde em pt-br, de forma clara e objetiva."},
             {"role": "user", "content": message}
         ],
         "temperature": 0.7,
