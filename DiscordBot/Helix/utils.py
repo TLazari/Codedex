@@ -1,4 +1,4 @@
-import openai, os, wikipedia
+import openai, os, wikipedia,json, requests
 from dotenv import load_dotenv
 from wikipedia.exceptions import DisambiguationError, PageError
 
@@ -24,22 +24,33 @@ def wiki(message):
         return f"⚠️ Ocorreu um erro: {e[:1997]}" 
     
 
+
+def get_meme():
+    response = requests.get('https://meme-api.com/gimme')
+    json_data = json.loads(response.text)
+    return json_data['url']
+
+
 load_dotenv()
 chatGptKey = os.getenv('chatGptKey') #Api do .env
 openai.api_key = chatGptKey 
 
-
-def gpt(message,contexto):
-
-  prompt = f'{contexto} + {message}'
-  resposta = openai.completions.create(
-    model = 'gpt-3.5-turbo-instruct',
-    prompt = prompt, 
-    max_tokens = 400,
-    temperature = 0.3
-  )
-  retorno_gpt = resposta.choices[0].text.strip()
-  contexto += f'usuário input: {message}\n Assistente: {retorno_gpt}' 
-  print (retorno_gpt)
-  return retorno_gpt
-
+def gpt(message):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {chatGptKey}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "gpt-3.5-turbo",         
+        "messages": [
+            {"role": "user", "content": message}
+        ],
+        "temperature": 0.7,
+        "max_tokens": 400
+    }
+    response = requests.post(url, headers=headers, json=data)
+    resposta = response.json()
+    print (resposta)
+    resposta = resposta['choices'][0]['message']['content']
+    return resposta
