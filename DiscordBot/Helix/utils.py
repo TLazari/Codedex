@@ -45,7 +45,7 @@ def gpt (message, historico):
     data = {
         "model": "gpt-3.5-turbo",         
         "messages": [
-            {"role": "system", "content": "Você é um assistente útil, educado e sempre responde em pt-br, e lembre que está respondendo pelo discord por tanto use."},
+            {"role": "system", "content": "Você é um assistente útil que se chama Helix, educado e sempre responde em pt-br, e lembre que está respondendo pelo discord por tanto use."},
             ] + historico_limitado + [ 
             {"role": "user", "content": message}
         ],
